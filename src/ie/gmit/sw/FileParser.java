@@ -10,7 +10,7 @@ import java.util.concurrent.BlockingQueue;
  *
  * @author Basti
  */
-public class FileParser implements Parser, Runnable {
+public class FileParser implements Parser<List<Shingle>> {
 
 	private Path fileLocation;
 	private BlockingQueue<Shingle> shingleQueue;
@@ -26,14 +26,24 @@ public class FileParser implements Parser, Runnable {
 	}
 
 	@Override
-	public void parse() {
-		LinkedList<String> buffer = new LinkedList<>();
+	public List<Shingle> parse() {
+		// String[] doc = new String(Files.readAllBytes(fileLocation)).toLowerCase().trim().replaceAll("(\\R|[^a-z])", " ").replaceAll("\\s{2,}", " ").split(" ");
+		// while (i < doc.length) {
+		// shingle = "";
+		//
+		// for (int j = 0; j < shingleSize && i < doc.length; j++, i++) {
+		// shingle += doc[i] + " ";
+		// }
+		// buffer.add(shingle.trim());
+		//
+		// }
+		// String[] doc = tmp.parallelStream().map(line -> line.toLowerCase().trim().replaceAll("(\\R|[^a-z])", " ").replaceAll("\\s{2,}", " ")).reduce((a, b) -> a + " " + b)
+		// .get().split(" ");
+
+		List<Shingle> buffer = new LinkedList<>();
 		try {
 
-			List<String> tmp = Files.readAllLines(fileLocation);
-
-			// String[] doc = tmp.parallelStream().map(line -> line.toLowerCase().trim().replaceAll("(\\R|[^a-z])", " ").replaceAll("\\s{2,}", " ")).reduce((a, b) -> a + " " + b)
-			// .get().split(" ");
+			// List<String> tmp = Files.readAllLines(fileLocation);
 
 			StringTokenizer tok = new StringTokenizer(new String(Files.readAllBytes(fileLocation)).toLowerCase().trim().replaceAll("(\\R|[^a-z])", " ").replaceAll("\\s{2,}", " "));
 
@@ -42,35 +52,34 @@ public class FileParser implements Parser, Runnable {
 				for (int j = 0; j < shingleSize && tok.hasMoreTokens(); j++) {
 					shingle += tok.nextToken() + " ";
 				}
-				buffer.add(shingle.trim());
+				buffer.add(new Shingle(docId, shingle.trim().hashCode()));
+
+				// shingleQueue.put(new Shingle(docId, shingle.trim().hashCode()));
 
 			}
 
-			// String[] doc = new String(Files.readAllBytes(fileLocation)).toLowerCase().trim().replaceAll("(\\R|[^a-z])", " ").replaceAll("\\s{2,}", " ").split(" ");
-			// while (i < doc.length) {
-			// shingle = "";
-			//
-			// for (int j = 0; j < shingleSize && i < doc.length; j++, i++) {
-			// shingle += doc[i] + " ";
-			// }
-			// buffer.add(shingle.trim());
-			//
-			// }
+			// System.out.println(shingleQueue.size());
+			// System.out.println(shingleQueue);
 
-			System.out.println(buffer.size());
-
-			buffer.stream().limit(10).forEach(System.out::println);
+			// buffer.stream().limit(10).forEach(System.out::println);
 
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		return buffer;
 
 	}
 
-	@Override
-	public void run() {
-		parse();
+	// @Override
+	// public void run() {
+	// parse();
+	//
+	// }
 
+	@Override
+	public List<Shingle> call() throws Exception {
+
+		return parse();
 	}
 
 }

@@ -6,8 +6,8 @@ package ie.gmit.sw;
  */
 public class Shingle {
 
-	private int	docId;
-	private int	hash;
+	private int docId;
+	private int hash;
 
 	public Shingle(int docId, int hash) {
 		this.docId = docId;
@@ -50,6 +50,11 @@ public class Shingle {
 			return false;
 		}
 		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "Shingle [docId=" + docId + ", hash=" + hash + "]";
 	}
 
 }
