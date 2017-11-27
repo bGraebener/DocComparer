@@ -1,83 +1,83 @@
 package ie.gmit.sw;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.*;
+import java.util.LinkedList;
 import java.util.concurrent.BlockingQueue;
+import java.util.stream.Stream;
 
 /**
  *
  * @author Basti
  */
-public class FileParser implements Parser<List<Shingle>> {
+public class FileParser implements Parser<Void> {
 
 	private Path fileLocation;
 	private BlockingQueue<Shingle> shingleQueue;
 	private int shingleSize;
-
+	private int numOfWorkers;
 	private int docId;
+	private int numOfFiles;
 
-	public FileParser(Path fileLocation, BlockingQueue<Shingle> shingleQueue, int shingleSize, int docId) {
+	public FileParser(Path fileLocation, BlockingQueue<Shingle> shingleQueue, int shingleSize, int docId, int numOfWorkers, int numOfFiles) {
 		this.fileLocation = fileLocation;
 		this.shingleQueue = shingleQueue;
 		this.shingleSize = shingleSize;
 		this.docId = docId;
+		this.numOfWorkers = numOfWorkers;
+		this.numOfFiles = numOfFiles;
 	}
 
 	@Override
-	public List<Shingle> parse() {
-		// String[] doc = new String(Files.readAllBytes(fileLocation)).toLowerCase().trim().replaceAll("(\\R|[^a-z])", " ").replaceAll("\\s{2,}", " ").split(" ");
-		// while (i < doc.length) {
-		// shingle = "";
-		//
-		// for (int j = 0; j < shingleSize && i < doc.length; j++, i++) {
-		// shingle += doc[i] + " ";
-		// }
-		// buffer.add(shingle.trim());
-		//
-		// }
-		// String[] doc = tmp.parallelStream().map(line -> line.toLowerCase().trim().replaceAll("(\\R|[^a-z])", " ").replaceAll("\\s{2,}", " ")).reduce((a, b) -> a + " " + b)
-		// .get().split(" ");
+	public Void parse() {
 
-		List<Shingle> buffer = new LinkedList<>();
-		try {
+		long start = System.currentTimeMillis();
 
-			// List<String> tmp = Files.readAllLines(fileLocation);
+		LinkedList<String> buffer = new LinkedList<>();
+		try (BufferedReader reader = Files.newBufferedReader(fileLocation)) {
 
-			StringTokenizer tok = new StringTokenizer(new String(Files.readAllBytes(fileLocation)).toLowerCase().trim().replaceAll("(\\R|[^a-z])", " ").replaceAll("\\s{2,}", " "));
+			String line = "";
+			while ((line = reader.readLine()) != null) {
 
-			while (tok.hasMoreTokens()) {
-				String shingle = "";
-				for (int j = 0; j < shingleSize && tok.hasMoreTokens(); j++) {
-					shingle += tok.nextToken() + " ";
+				Stream.of(line.split(" ")).map(word -> word.toLowerCase().replaceAll("\\W", " ").trim()).filter(word -> !word.isEmpty()).forEach(buffer::add);
+
+				while (buffer.size() >= shingleSize) {
+					StringBuilder tmp = new StringBuilder();
+
+					for (int i = 0; i < shingleSize; i++) {
+
+						tmp.append(buffer.removeFirst() + " ");
+
+					}
+
+					shingleQueue.put(new Shingle(docId, tmp.hashCode()));
+
 				}
-				buffer.add(new Shingle(docId, shingle.trim().hashCode()));
-
-				// shingleQueue.put(new Shingle(docId, shingle.trim().hashCode()));
 
 			}
+			int lastHash = buffer.stream().reduce((a, b) -> a + " " + b).get().hashCode();
 
-			// System.out.println(shingleQueue.size());
-			// System.out.println(shingleQueue);
+			shingleQueue.put(new Shingle(docId, lastHash));
 
-			// buffer.stream().limit(10).forEach(System.out::println);
+			for (int i = 0; i < numOfWorkers / numOfFiles; i++) {
+				shingleQueue.put(new PoisonShingle());
+			}
 
 		} catch (IOException e) {
 			e.printStackTrace();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
 		}
-		return buffer;
+
+		System.out.println("Finished parsing " + docId + " in: " + (System.currentTimeMillis() - start));
+		return null;
 
 	}
 
-	// @Override
-	// public void run() {
-	// parse();
-	//
-	// }
-
 	@Override
-	public List<Shingle> call() throws Exception {
+	public Void call() throws Exception {
 
 		return parse();
 	}
