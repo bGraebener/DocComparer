@@ -52,16 +52,18 @@ public class FileParser implements Parser<Void> {
 
 					}
 
-					shingleQueue.put(new Shingle(docId, tmp.hashCode()));
+					shingleQueue.put(new Shingle(docId, tmp.toString().hashCode()));
 
 				}
 
 			}
-			int lastHash = buffer.stream().reduce((a, b) -> a + " " + b).get().hashCode();
+			if (buffer.size() > 0) {
 
-			shingleQueue.put(new Shingle(docId, lastHash));
+				int lastHash = buffer.stream().reduce((a, b) -> a + " " + b).get().hashCode();
+				shingleQueue.put(new Shingle(docId, lastHash));
+			}
 
-			for (int i = 0; i < numOfWorkers / numOfFiles; i++) {
+			for (int i = 0; i < numOfWorkers / numOfFiles + 1; i++) {
 				shingleQueue.put(new PoisonShingle());
 			}
 

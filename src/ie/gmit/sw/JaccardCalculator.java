@@ -1,7 +1,6 @@
 package ie.gmit.sw;
 
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  *
@@ -18,7 +17,18 @@ public class JaccardCalculator implements Calculator {
 	@Override
 	public double calculate() {
 
-		return 0;
+		List<Integer> a = hashes.get(0);
+		List<Integer> b = hashes.get(1);
+
+		List<Integer> c = new ArrayList<>(a);
+
+		c.retainAll(b);
+
+		System.out.println("c: " + c.size());
+
+		double jaccard = (double) c.size() / (a.size() + b.size() - c.size());
+
+		return jaccard;
 	}
 
 }

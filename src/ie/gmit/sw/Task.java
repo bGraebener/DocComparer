@@ -39,23 +39,25 @@ public class Task implements Runnable {
 				}
 
 				List<Integer> minHashes = rands.stream().map(rand -> rand ^ next.getHash()).collect(Collectors.toList());
-
 				hashes.merge(next.getDocId(), minHashes, (a, b) -> this.computeMinList(a, b));
 
 				// System.out.println(hashes.get(next.getDocId()));
 
+				// for (int i = 0; i < rands.size(); i++) {
+				// int hash = next.getHash() ^ rands.get(i);
+				//
+				// synchronized (hashes) {
+				//
+				// if (hashes.get(next.getDocId()).get(i) > hash) {
+				// hashes.get(next.getDocId()).set(i, hash);
+				// }
+				// }
+				//
+				// }
+
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-
-			// for (int i = 0; i < rands.size(); i++) {
-			// int hash = next.getHash() ^ rands.get(i);
-			//
-			// if (hashes.get(next.getDocId()).get(i) > hash) {
-			// hashes.get(next.getDocId()).set(i, hash);
-			// }
-			//
-			// }
 		}
 	}
 
