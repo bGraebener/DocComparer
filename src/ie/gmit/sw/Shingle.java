@@ -5,7 +5,9 @@ package ie.gmit.sw;
 // TODO: Auto-generated Javadoc
 
 /**
- * The Class Shingle.
+ * Shingles are numeric representations of a <code>String</code> of an arbitrary number of words or characters. The
+ * numeric representation is stored as an integer.
+ * Every <code>Shingle</code> belongs to a specific document indicated by a document id.
  *
  * @author Bastian Graebener
  */
@@ -15,30 +17,23 @@ public class Shingle {
 	private int hash;
 
 	/**
-	 * Instantiates a new shingle.
-	 *
-	 * <p>
-	 *
-	 * </p>
+	 * Constructs a new <code>Shingle</code> with a document id and the hash code that represents the
+	 * <code>String</code>.
 	 *
 	 * @param docId
-	 *            the doc id
+	 *            the document id the Shingle belongs to
 	 * @param hash
-	 *            the hash
+	 *            the hash code of the <code>String</code>
 	 */
 	public Shingle(int docId, int hash) {
 		this.docId = docId;
 		this.hash = hash;
 	}
 
-	// protected Shingle() {
-	//
-	// }
-
 	/**
 	 * Gets the doc id.
 	 *
-	 * @return the doc id
+	 * @return the document id the <code>Shingle</code> belongs to.
 	 */
 	public int getDocId() {
 		return docId;
@@ -47,7 +42,7 @@ public class Shingle {
 	/**
 	 * Gets the hash.
 	 *
-	 * @return the hash
+	 * @return the hash code that represents the <code>String</code>.
 	 */
 	public int getHash() {
 		return hash;

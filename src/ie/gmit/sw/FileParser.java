@@ -13,9 +13,16 @@ import java.util.stream.Stream;
 
 // TODO: Auto-generated Javadoc
 /**
- * The Class FileParser.
+ * A <code>Parser</code> that takes a file as a source for the parsing.
+ * <p>
+ * <code>FileParser</code> uses a <code>BufferedReader</code> to read a text based file line-by-line. The lines are
+ * split up into individual words and sanitized to only contain ASCII characters.
+ * <p>
+ * It implements <code>Runnable</code> so every parsing operation can run on its own thread.
+ *
+ *
  */
-public class FileParser implements Parser {
+public class FileParser implements Parser, Runnable {
 
 	private Path fileLocation;
 	private BlockingQueue<Shingle> shingleQueue;
@@ -25,7 +32,7 @@ public class FileParser implements Parser {
 	private int numOfFiles;
 
 	/**
-	 * Instantiates a new file parser.
+	 * Creates a new instance of a <code>FileParser</code>.
 	 *
 	 * <p>
 	 *

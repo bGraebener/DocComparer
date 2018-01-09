@@ -4,18 +4,17 @@ package ie.gmit.sw;
 
 // TODO: Auto-generated Javadoc
 /**
- * The Interface Parser.
+ * The interface should be implemented by any class whose instances are used to parse a source.
  *
  * @author Bastian Graebener
  */
-public interface Parser extends Runnable {
+public interface Parser {
 
 	/**
-	 * Parses the.
-	 *
+	 * An object implementing the <code>Parser</code> interface must provide an implementation of the parse method. The
+	 * source of the parsing must be defined in the implementing class.
 	 * <p>
-	 *
-	 * </p>
+	 * This method is stateless. It may take any action.
 	 */
 	void parse();
 
