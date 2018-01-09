@@ -14,9 +14,9 @@ public class Shingle {
 		this.hash = hash;
 	}
 
-	protected Shingle() {
-
-	}
+	// protected Shingle() {
+	//
+	// }
 
 	public int getDocId() {
 		return docId;

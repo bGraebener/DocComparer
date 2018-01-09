@@ -63,6 +63,7 @@ public class FileParser implements Parser<Void> {
 				shingleQueue.put(new Shingle(docId, lastHash));
 			}
 
+			// add enough poison pills for all workers
 			for (int i = 0; i < numOfWorkers / numOfFiles + 1; i++) {
 				shingleQueue.put(new PoisonShingle());
 			}
@@ -73,7 +74,7 @@ public class FileParser implements Parser<Void> {
 			e.printStackTrace();
 		}
 
-		System.out.println("Finished parsing " + docId + " in: " + (System.currentTimeMillis() - start));
+		System.out.println("Finished parsing document " + docId + " in: " + (System.currentTimeMillis() - start) + " milliseconds.");
 		return null;
 
 	}

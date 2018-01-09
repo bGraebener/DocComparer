@@ -9,26 +9,17 @@ public class Comparer {
 	private FileParser fileParserOne;
 	private FileParser fileParserTwo;
 	private BlockingQueue<Shingle> shingleQueue;
-	// private List<Integer> rands;
 	private int numOfWorkers;
-	// private CountDownLatch latch;
 	private Map<Integer, List<Integer>> hashes;
 	private Calculator calculator;
 
 	private int numOfHashes;
-	// private int numOfFiles;
-	// private int shingleSize;
-	// private List<Path> paths;
 
 	public Comparer(int numOfWorkers, int numOfHashes, int numOfFiles, int shingleSize, List<Path> paths) {
 		this.numOfWorkers = numOfWorkers;
 		this.numOfHashes = numOfHashes;
-		// this.numOfFiles = numOfFiles;
-		// this.shingleSize = shingleSize;
-		// this.paths = paths;
 
 		shingleQueue = new LinkedBlockingQueue<>();
-		// rands = new Random(0).ints(numOfHashes).boxed().collect(Collectors.toList());
 
 		hashes = new ConcurrentHashMap<>();
 		hashes.put(0, new ArrayList<>(Collections.nCopies(numOfHashes, Integer.MAX_VALUE)));
@@ -46,37 +37,31 @@ public class Comparer {
 
 		long start = System.currentTimeMillis();
 
-		System.out.println("start parsing file 1");
+		System.out.println("\nStarting to calculate the Jaccard Index!");
+
+		System.out.println("\nParsing file 1 ...");
 
 		service.submit(fileParserOne);
 
-		// fileParser = new FileParser(Paths.get("res/War.txt"), shingleQueue, shingleSize, 1, numOfWorkers, numOfFiles);
-
-		System.out.println("start parsing file 2");
+		System.out.println("Parsing file 2 ...");
 		service.submit(fileParserTwo);
 
-		System.out.println("start workers");
+		System.out.println("\nStarting worker threads...");
 
-		// List<Callable<Object>> tasks = Stream.generate(() -> new Task(shingleQueue, hashes, rands, latch)).limit(numOfWorkers).map(Executors::callable)
-		// .collect(Collectors.toList());
+		service.submit(new Consumer(shingleQueue, hashes, numOfWorkers, numOfHashes));
 
-		new Consumer(shingleQueue, hashes, numOfWorkers, numOfHashes);
-
-		System.out.println("Workers finished ...");
+		System.out.println("Worker threads finished...");
 
 		try {
-			// service.invokeAll(tasks);
-
 			service.shutdown();
-			// latch.await();
 			service.awaitTermination(1, TimeUnit.DAYS);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
 
 		double result = calculator.calculate();
-		System.out.println(result);
-		System.out.println("finished in " + (System.currentTimeMillis() - start));
+		System.out.printf("\nThe calculated similarity for the documents is: %.2f%%\n", result);
+		System.out.println("The operation took " + (System.currentTimeMillis() - start) + " milliseconds to complete.");
 
 	}
 

@@ -23,8 +23,6 @@ public class Task implements Runnable {
 		this.rands = rands;
 	}
 
-	/* (non-Javadoc)
-	 * @see java.lang.Runnable#run() */
 	@Override
 	public void run() {
 

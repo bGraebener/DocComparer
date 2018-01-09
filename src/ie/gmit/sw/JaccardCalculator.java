@@ -24,11 +24,11 @@ public class JaccardCalculator implements Calculator {
 
 		c.retainAll(b);
 
-		System.out.println("c: " + c.size());
+		// System.out.println("c: " + c.size());
 
 		double jaccard = (double) c.size() / (a.size() + b.size() - c.size());
 
-		return jaccard;
+		return jaccard * 100;
 	}
 
 }

@@ -9,7 +9,6 @@ import java.util.*;
  */
 public class Runner {
 
-	// private int numOfDocs = 0;
 	private List<Path> paths = new ArrayList<>();
 
 	private Scanner scanner;
@@ -31,8 +30,6 @@ public class Runner {
 	public static void main(String[] args) {
 
 		new Runner().showMenu();
-
-		// new Comparer().start();
 	}
 
 	public void showMenu() {
@@ -40,11 +37,6 @@ public class Runner {
 		System.out.println("******************Welcome to the Document Comparer******************");
 		System.out.println("--------------------------------------------------------------------");
 		System.out.println();
-
-		// do {
-		// System.out.print("Please enter the number of documents you wish to compare (min 2): ");
-		// numOfDocs = scanner.nextInt();
-		// } while (numOfDocs < 2);
 
 		// get paths for two documents
 		for (int i = 0; i < 2; i++) {
@@ -64,15 +56,7 @@ public class Runner {
 
 		showDefaultSettings();
 
-		String choice;
-		do {
-			System.out.println("Do you want to use the default settings? (y\\n)");
-			choice = scanner.next();
-		} while (!choice.equalsIgnoreCase("y") && !choice.equalsIgnoreCase("n"));
-
-		if (!choice.equalsIgnoreCase("y")) {
-			getSettings();
-		}
+		chooseSettings();
 
 		Comparer comparer = new Comparer(numOfWorkers, numMinHashes, 2, shingleSize, paths);
 
@@ -80,11 +64,24 @@ public class Runner {
 
 	}
 
+	private void chooseSettings() {
+		String choice;
+		do {
+			System.out.print("\nDo you want to use the default settings? (y\\n): ");
+			choice = scanner.next();
+		} while (!choice.equalsIgnoreCase("y") && !choice.equalsIgnoreCase("n"));
+
+		if (!choice.equalsIgnoreCase("y")) {
+			getSettings();
+		}
+	}
+
 	private void showDefaultSettings() {
-		System.out.println("\nDefault settings: ");
-		System.out.println("Shingle size: " + shingleSize);
-		System.out.println("Number of minhashes: " + numMinHashes);
-		System.out.println("Number of workers: " + numOfWorkers);
+		System.out.println("\nDefault settings");
+		System.out.println("----------------");
+		System.out.println("\n\tShingle size: " + shingleSize);
+		System.out.println("\tNumber of minhashes: " + numMinHashes);
+		System.out.println("\tNumber of workers: " + numOfWorkers);
 	}
 
 	private void getSettings() {

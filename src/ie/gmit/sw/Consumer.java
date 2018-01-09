@@ -19,14 +19,12 @@ public class Consumer implements Runnable {
 	private ExecutorService service;
 
 	private int maxWorkers;
-	// private int numOfHashes;
 
 	public Consumer(BlockingQueue<Shingle> queue, Map<Integer, List<Integer>> hashes, int maxWorkers, int numOfHashes) {
 		this.queue = queue;
 		this.hashes = hashes;
 		this.maxWorkers = maxWorkers;
 		this.latch = new CountDownLatch(maxWorkers);
-		// this.numOfHashes = numOfHashes;
 
 		this.rands = new Random(0).ints(numOfHashes).boxed().collect(Collectors.toList());
 		service = Executors.newFixedThreadPool(maxWorkers);
@@ -35,12 +33,29 @@ public class Consumer implements Runnable {
 
 	}
 
-	/* (non-Javadoc)
-	 * @see java.lang.Runnable#run() */
 	@Override
 	public void run() {
+
+		// int docCount = 2;
+
 		List<Callable<Object>> tasks = Stream.generate(() -> new Task(queue, hashes, rands, latch)).limit(maxWorkers).map(Executors::callable).collect(Collectors.toList());
 
+		// while (docCount > 0) {
+		// try {
+		// Shingle nextShingle = queue.take();
+		//
+		// if (nextShingle instanceof PoisonShingle) {
+		// docCount--;
+		// } else {
+		//
+		// service.submit(new Task(queue, hashes, rands, latch));
+		// }
+		//
+		// } catch (InterruptedException e) {
+		// e.printStackTrace();
+		// }
+		//
+		// }
 		try {
 			service.invokeAll(tasks);
 
