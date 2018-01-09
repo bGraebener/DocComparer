@@ -1,19 +1,34 @@
+/* Class: JaccardCalculator.java
+ * Author: Bastian Graebener - G00340600 */
+
 package ie.gmit.sw;
 
 import java.util.*;
 
+// TODO: Auto-generated Javadoc
 /**
- *
- * @author Basti
+ * The Class JaccardCalculator.
  */
 public class JaccardCalculator implements Calculator {
 
 	private Map<Integer, List<Integer>> hashes;
 
+	/**
+	 * Instantiates a new jaccard calculator.
+	 *
+	 * <p>
+	 *
+	 * </p>
+	 *
+	 * @param hashes
+	 *            the hashes
+	 */
 	public JaccardCalculator(Map<Integer, List<Integer>> hashes) {
 		this.hashes = hashes;
 	}
 
+	/* (non-Javadoc)
+	 * @see ie.gmit.sw.Calculator#calculate() */
 	@Override
 	public double calculate() {
 

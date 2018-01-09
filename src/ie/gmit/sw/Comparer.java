@@ -1,9 +1,16 @@
+/* Class: Comparer.java
+ * Author: Bastian Graebener - G00340600 */
+
 package ie.gmit.sw;
 
 import java.nio.file.Path;
 import java.util.*;
 import java.util.concurrent.*;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class Comparer.
+ */
 public class Comparer {
 
 	private FileParser fileParserOne;
@@ -15,7 +22,26 @@ public class Comparer {
 
 	private int numOfHashes;
 
-	public Comparer(int numOfWorkers, int numOfHashes, int numOfFiles, int shingleSize, List<Path> paths) {
+	/**
+	 * Instantiates a new comparer.
+	 *
+	 * <p>
+	 *
+	 * </p>
+	 *
+	 * @param numOfWorkers
+	 *            the num of workers
+	 * @param numOfHashes
+	 *            the num of hashes
+	 * @param numOfFiles
+	 *            the num of files
+	 * @param shingleSize
+	 *            the shingle size
+	 * @param paths
+	 *            the paths
+	 */
+	public Comparer(int numOfWorkers, int numOfHashes, int numOfFiles, int shingleSize,
+			List<Path> paths) {
 		this.numOfWorkers = numOfWorkers;
 		this.numOfHashes = numOfHashes;
 
@@ -26,11 +52,20 @@ public class Comparer {
 		hashes.put(1, new ArrayList<>(Collections.nCopies(numOfHashes, Integer.MAX_VALUE)));
 		calculator = new JaccardCalculator(hashes);
 
-		fileParserOne = new FileParser(paths.get(0), shingleQueue, shingleSize, 0, numOfWorkers, numOfFiles);
-		fileParserTwo = new FileParser(paths.get(1), shingleQueue, shingleSize, 1, numOfWorkers, numOfFiles);
+		fileParserOne = new FileParser(paths.get(0), shingleQueue, shingleSize, 0, numOfWorkers,
+				numOfFiles);
+		fileParserTwo = new FileParser(paths.get(1), shingleQueue, shingleSize, 1, numOfWorkers,
+				numOfFiles);
 
 	}
 
+	/**
+	 * Start.
+	 *
+	 * <p>
+	 *
+	 * </p>
+	 */
 	public void start() {
 
 		ExecutorService service = Executors.newCachedThreadPool();
@@ -61,7 +96,8 @@ public class Comparer {
 
 		double result = calculator.calculate();
 		System.out.printf("\nThe calculated similarity for the documents is: %.2f%%\n", result);
-		System.out.println("The operation took " + (System.currentTimeMillis() - start) + " milliseconds to complete.");
+		System.out.println("The operation took " + (System.currentTimeMillis() - start)
+				+ " milliseconds to complete.");
 
 	}
 

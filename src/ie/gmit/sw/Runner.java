@@ -1,22 +1,33 @@
+/* Class: Runner.java
+ * Author: Bastian Graebener - G00340600 */
+
 package ie.gmit.sw;
 
 import java.nio.file.*;
 import java.util.*;
 
 /**
+ * The main entry point to the application.
  *
- * @author Basti
+ * <p>
+ * Provides a command line menu to the user and sets default values for settings needed by the jaccard index calculator.
+ * </p>
  */
 public class Runner {
 
-	private List<Path> paths = new ArrayList<>();
-
+	private List<Path> paths;
 	private Scanner scanner;
-
 	private int shingleSize;
 	private int numMinHashes;
 	private int numOfWorkers;
 
+	/**
+	 * Instantiates a new runner.
+	 *
+	 * <p>
+	 * Sets default values for the shingle sizes, number of minHashes and the number of worker threads.
+	 * </p>
+	 */
 	public Runner() {
 
 		shingleSize = 4;
@@ -24,14 +35,28 @@ public class Runner {
 		numOfWorkers = 100;
 
 		scanner = new Scanner(System.in);
-
+		paths = new ArrayList<>();
 	}
 
+	/**
+	 * The main entry point to the application.
+	 *
+	 * @param args
+	 *            the command line arguments
+	 */
 	public static void main(String[] args) {
 
 		new Runner().showMenu();
 	}
 
+	/**
+	 * Shows the main application menu.
+	 *
+	 * <p>
+	 * Asks the user for the location for two documents on the file system. Checks whether the files exist on the file
+	 * system. Asks the user for a location as long as no valid file path is entered.
+	 * </p>
+	 */
 	public void showMenu() {
 
 		System.out.println("******************Welcome to the Document Comparer******************");
@@ -64,6 +89,9 @@ public class Runner {
 
 	}
 
+	/**
+	 * Asks the user whether to use default settings or not.
+	 */
 	private void chooseSettings() {
 		String choice;
 		do {
@@ -76,6 +104,9 @@ public class Runner {
 		}
 	}
 
+	/**
+	 * Shows the default settings.
+	 */
 	private void showDefaultSettings() {
 		System.out.println("\nDefault settings");
 		System.out.println("----------------");
@@ -84,6 +115,9 @@ public class Runner {
 		System.out.println("\tNumber of workers: " + numOfWorkers);
 	}
 
+	/**
+	 * Sets the custom settings from the user input.
+	 */
 	private void getSettings() {
 		System.out.print("Please enter shingle size: ");
 		shingleSize = scanner.nextInt();

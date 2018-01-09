@@ -1,3 +1,6 @@
+/* Class: Consumer.java
+ * Author: Bastian Graebener - G00340600 */
+
 package ie.gmit.sw;
 
 import java.util.*;
@@ -5,9 +8,9 @@ import java.util.concurrent.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+// TODO: Auto-generated Javadoc
 /**
- *
- * @author Basti
+ * The Class Consumer.
  */
 public class Consumer implements Runnable {
 
@@ -20,7 +23,24 @@ public class Consumer implements Runnable {
 
 	private int maxWorkers;
 
-	public Consumer(BlockingQueue<Shingle> queue, Map<Integer, List<Integer>> hashes, int maxWorkers, int numOfHashes) {
+	/**
+	 * Instantiates a new consumer.
+	 *
+	 * <p>
+	 *
+	 * </p>
+	 *
+	 * @param queue
+	 *            the queue
+	 * @param hashes
+	 *            the hashes
+	 * @param maxWorkers
+	 *            the max workers
+	 * @param numOfHashes
+	 *            the num of hashes
+	 */
+	public Consumer(BlockingQueue<Shingle> queue, Map<Integer, List<Integer>> hashes,
+			int maxWorkers, int numOfHashes) {
 		this.queue = queue;
 		this.hashes = hashes;
 		this.maxWorkers = maxWorkers;
@@ -33,12 +53,15 @@ public class Consumer implements Runnable {
 
 	}
 
+	/* (non-Javadoc)
+	 * @see java.lang.Runnable#run() */
 	@Override
 	public void run() {
 
 		// int docCount = 2;
 
-		List<Callable<Object>> tasks = Stream.generate(() -> new Task(queue, hashes, rands, latch)).limit(maxWorkers).map(Executors::callable).collect(Collectors.toList());
+		List<Callable<Object>> tasks = Stream.generate(() -> new Task(queue, hashes, rands, latch))
+				.limit(maxWorkers).map(Executors::callable).collect(Collectors.toList());
 
 		// while (docCount > 0) {
 		// try {

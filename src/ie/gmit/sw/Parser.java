@@ -1,14 +1,22 @@
+/* Class: Parser.java
+ * Author: Bastian Graebener - G00340600 */
 package ie.gmit.sw;
 
-import java.util.concurrent.Callable;
-
+// TODO: Auto-generated Javadoc
 /**
+ * The Interface Parser.
  *
- * @author Basti
- * @param <T>
+ * @author Bastian Graebener
  */
-public interface Parser<T> extends Callable<T> {
+public interface Parser extends Runnable {
 
-	T parse();
+	/**
+	 * Parses the.
+	 *
+	 * <p>
+	 *
+	 * </p>
+	 */
+	void parse();
 
 }

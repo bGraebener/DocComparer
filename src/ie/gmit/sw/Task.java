@@ -1,3 +1,5 @@
+/* Class: Task.java
+ * Author: Bastian Graebener - G00340600 */
 package ie.gmit.sw;
 
 import java.util.*;
@@ -5,9 +7,11 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.CountDownLatch;
 import java.util.stream.Collectors;
 
+// TODO: Auto-generated Javadoc
 /**
+ * The Class Task.
  *
- * @author Basti
+ * @author Bastian Graebener
  */
 public class Task implements Runnable {
 
@@ -16,13 +20,32 @@ public class Task implements Runnable {
 	private CountDownLatch latch;
 	private List<Integer> rands;
 
-	public Task(BlockingQueue<Shingle> queue, Map<Integer, List<Integer>> hashes, List<Integer> rands, CountDownLatch latch) {
+	/**
+	 * Instantiates a new task.
+	 *
+	 * <p>
+	 *
+	 * </p>
+	 *
+	 * @param queue
+	 *            the queue
+	 * @param hashes
+	 *            the hashes
+	 * @param rands
+	 *            the rands
+	 * @param latch
+	 *            the latch
+	 */
+	public Task(BlockingQueue<Shingle> queue, Map<Integer, List<Integer>> hashes,
+			List<Integer> rands, CountDownLatch latch) {
 		this.queue = queue;
 		this.hashes = hashes;
 		this.latch = latch;
 		this.rands = rands;
 	}
 
+	/* (non-Javadoc)
+	 * @see java.lang.Runnable#run() */
 	@Override
 	public void run() {
 
@@ -36,7 +59,8 @@ public class Task implements Runnable {
 					return;
 				}
 
-				List<Integer> minHashes = rands.stream().map(rand -> rand ^ next.getHash()).collect(Collectors.toList());
+				List<Integer> minHashes = rands.stream().map(rand -> rand ^ next.getHash())
+						.collect(Collectors.toList());
 				hashes.merge(next.getDocId(), minHashes, (a, b) -> this.computeMinList(a, b));
 
 				// System.out.println(hashes.get(next.getDocId()));
@@ -59,6 +83,19 @@ public class Task implements Runnable {
 		}
 	}
 
+	/**
+	 * Compute min list.
+	 *
+	 * <p>
+	 *
+	 * </p>
+	 *
+	 * @param a
+	 *            the a
+	 * @param b
+	 *            the b
+	 * @return the list
+	 */
 	private List<Integer> computeMinList(List<Integer> a, List<Integer> b) {
 
 		List<Integer> list = new ArrayList<>();

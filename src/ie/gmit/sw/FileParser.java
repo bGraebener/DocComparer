@@ -1,3 +1,6 @@
+/* Class: FileParser.java
+ * Author: Bastian Graebener - G00340600 */
+
 package ie.gmit.sw;
 
 import java.io.BufferedReader;
@@ -8,11 +11,11 @@ import java.util.LinkedList;
 import java.util.concurrent.BlockingQueue;
 import java.util.stream.Stream;
 
+// TODO: Auto-generated Javadoc
 /**
- *
- * @author Basti
+ * The Class FileParser.
  */
-public class FileParser implements Parser<Void> {
+public class FileParser implements Parser {
 
 	private Path fileLocation;
 	private BlockingQueue<Shingle> shingleQueue;
@@ -21,7 +24,28 @@ public class FileParser implements Parser<Void> {
 	private int docId;
 	private int numOfFiles;
 
-	public FileParser(Path fileLocation, BlockingQueue<Shingle> shingleQueue, int shingleSize, int docId, int numOfWorkers, int numOfFiles) {
+	/**
+	 * Instantiates a new file parser.
+	 *
+	 * <p>
+	 *
+	 * </p>
+	 *
+	 * @param fileLocation
+	 *            the file location
+	 * @param shingleQueue
+	 *            the shingle queue
+	 * @param shingleSize
+	 *            the shingle size
+	 * @param docId
+	 *            the doc id
+	 * @param numOfWorkers
+	 *            the num of workers
+	 * @param numOfFiles
+	 *            the num of files
+	 */
+	public FileParser(Path fileLocation, BlockingQueue<Shingle> shingleQueue, int shingleSize,
+			int docId, int numOfWorkers, int numOfFiles) {
 		this.fileLocation = fileLocation;
 		this.shingleQueue = shingleQueue;
 		this.shingleSize = shingleSize;
@@ -30,8 +54,10 @@ public class FileParser implements Parser<Void> {
 		this.numOfFiles = numOfFiles;
 	}
 
+	/* (non-Javadoc)
+	 * @see ie.gmit.sw.Parser#parse() */
 	@Override
-	public Void parse() {
+	public void parse() {
 
 		long start = System.currentTimeMillis();
 
@@ -41,7 +67,9 @@ public class FileParser implements Parser<Void> {
 			String line = "";
 			while ((line = reader.readLine()) != null) {
 
-				Stream.of(line.split(" ")).map(word -> word.toLowerCase().replaceAll("\\W", " ").trim()).filter(word -> !word.isEmpty()).forEach(buffer::add);
+				Stream.of(line.split(" "))
+						.map(word -> word.toLowerCase().replaceAll("\\W", " ").trim())
+						.filter(word -> !word.isEmpty()).forEach(buffer::add);
 
 				while (buffer.size() >= shingleSize) {
 					StringBuilder tmp = new StringBuilder();
@@ -74,15 +102,17 @@ public class FileParser implements Parser<Void> {
 			e.printStackTrace();
 		}
 
-		System.out.println("Finished parsing document " + docId + " in: " + (System.currentTimeMillis() - start) + " milliseconds.");
-		return null;
+		System.out.println("Completed parsing document " + docId + " in "
+				+ (System.currentTimeMillis() - start) + " milliseconds.");
 
 	}
 
+	/* (non-Javadoc)
+	 * @see java.util.concurrent.Callable#call() */
 	@Override
-	public Void call() throws Exception {
+	public void run() {
 
-		return parse();
+		parse();
 	}
 
 }
