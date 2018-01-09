@@ -1,45 +1,46 @@
 package ie.gmit.sw;
 
-import java.nio.file.Paths;
+import java.nio.file.Path;
 import java.util.*;
 import java.util.concurrent.*;
-import java.util.stream.Collectors;
 
 public class Comparer {
 
-	private FileParser fileParser;
+	private FileParser fileParserOne;
+	private FileParser fileParserTwo;
 	private BlockingQueue<Shingle> shingleQueue;
-	private List<Integer> rands;
+	// private List<Integer> rands;
 	private int numOfWorkers;
 	// private CountDownLatch latch;
 	private Map<Integer, List<Integer>> hashes;
 	private Calculator calculator;
 
 	private int numOfHashes;
-	private int numOfFiles;
-	private int shingleSize;
+	// private int numOfFiles;
+	// private int shingleSize;
+	// private List<Path> paths;
 
-	public static void main(String[] args) {
-		new Comparer().start();
-	}
+	public Comparer(int numOfWorkers, int numOfHashes, int numOfFiles, int shingleSize, List<Path> paths) {
+		this.numOfWorkers = numOfWorkers;
+		this.numOfHashes = numOfHashes;
+		// this.numOfFiles = numOfFiles;
+		// this.shingleSize = shingleSize;
+		// this.paths = paths;
 
-	public Comparer() {
 		shingleQueue = new LinkedBlockingQueue<>();
-		numOfWorkers = Runtime.getRuntime().availableProcessors();
-		numOfHashes = 300;
-		numOfFiles = 2;
-		shingleSize = 4;
+		// rands = new Random(0).ints(numOfHashes).boxed().collect(Collectors.toList());
 
-		fileParser = new FileParser(Paths.get("res/WarAndPeace.txt"), shingleQueue, shingleSize, 0, numOfWorkers, numOfFiles);
-		rands = new Random(0).ints(numOfHashes).boxed().collect(Collectors.toList());
-		// latch = new CountDownLatch(numOfWorkers);
 		hashes = new ConcurrentHashMap<>();
 		hashes.put(0, new ArrayList<>(Collections.nCopies(numOfHashes, Integer.MAX_VALUE)));
 		hashes.put(1, new ArrayList<>(Collections.nCopies(numOfHashes, Integer.MAX_VALUE)));
 		calculator = new JaccardCalculator(hashes);
+
+		fileParserOne = new FileParser(paths.get(0), shingleQueue, shingleSize, 0, numOfWorkers, numOfFiles);
+		fileParserTwo = new FileParser(paths.get(1), shingleQueue, shingleSize, 1, numOfWorkers, numOfFiles);
+
 	}
 
-	private void start() {
+	public void start() {
 
 		ExecutorService service = Executors.newCachedThreadPool();
 
@@ -47,12 +48,12 @@ public class Comparer {
 
 		System.out.println("start parsing file 1");
 
-		service.submit(fileParser);
+		service.submit(fileParserOne);
 
-		fileParser = new FileParser(Paths.get("res/War.txt"), shingleQueue, shingleSize, 1, numOfWorkers, numOfFiles);
+		// fileParser = new FileParser(Paths.get("res/War.txt"), shingleQueue, shingleSize, 1, numOfWorkers, numOfFiles);
 
 		System.out.println("start parsing file 2");
-		service.submit(fileParser);
+		service.submit(fileParserTwo);
 
 		System.out.println("start workers");
 
