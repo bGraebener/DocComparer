@@ -2,7 +2,6 @@
  * Author: Bastian Graebener - G00340600 */
 package ie.gmit.sw;
 
-// TODO: Auto-generated Javadoc
 /**
  * The interface should be implemented by any class whose instances are used to parse a source.
  *

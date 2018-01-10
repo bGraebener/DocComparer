@@ -1,23 +1,16 @@
-/*
- * Class: Calculator.java
- * Author: Bastian Graebener - G00340600
- */
+/* Class: Calculator.java
+ * Author: Bastian Graebener - G00340600 */
 package ie.gmit.sw;
 
-// TODO: Auto-generated Javadoc
 /**
- * The Interface Calculator.
+ * The Calculator Interface should be implemented by all classes that perform some form of calculations.
  */
 public interface Calculator {
 
 	/**
-	 * Calculate.
-	 * 
-	 * <p>
-	 * 
-	 * </p>
+	 * Performs some form of calculation and returns the result.
 	 *
-	 * @return the double
+	 * @return the result of the calculation
 	 */
 	double calculate();
 }

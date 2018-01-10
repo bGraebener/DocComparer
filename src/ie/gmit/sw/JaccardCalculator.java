@@ -17,10 +17,7 @@ public class JaccardCalculator implements Calculator {
 
 	/**
 	 * Creates a new instance of JaccardCalculator.
-	 *
 	 * <p>
-	 *
-	 * </p>
 	 *
 	 * @param hashes
 	 *            the hashes
@@ -40,8 +37,6 @@ public class JaccardCalculator implements Calculator {
 		List<Integer> c = new ArrayList<>(a);
 
 		c.retainAll(b);
-
-		// System.out.println("c: " + c.size());
 
 		double jaccard = (double) c.size() / (a.size() + b.size() - c.size());
 

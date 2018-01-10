@@ -9,7 +9,9 @@ import java.util.stream.Collectors;
 
 // TODO: Auto-generated Javadoc
 /**
- * The Class Task.
+ * A Task creates 'minHashes' from <code>Shingles</code>.
+ * <p>
+ * Every Task should be run in its own thread.
  *
  * @author Bastian Graebener
  */
@@ -21,20 +23,20 @@ public class Task implements Runnable {
 	private List<Integer> rands;
 
 	/**
-	 * Instantiates a new task.
-	 *
+	 * Creates a new instance of a task.
 	 * <p>
-	 *
-	 * </p>
+	 * A <code>Task</code> takes new <code>Shingle</code>s of the BlockingQueue until it encounters a
+	 * <code>PoisonPill</code>. It then creates a List of 'minHashes' for every Shingle and computes the smallest value
+	 * for every index in the List of minHashes.
 	 *
 	 * @param queue
-	 *            the queue
+	 *            the BlockingQueue containing the Shingles
 	 * @param hashes
-	 *            the hashes
+	 *            the Map with a List of minHashes for every document
 	 * @param rands
-	 *            the rands
+	 *            the List of random integer values
 	 * @param latch
-	 *            the latch
+	 *            the CountDownLatch used to count the number of finished tasks
 	 */
 	public Task(BlockingQueue<Shingle> queue, Map<Integer, List<Integer>> hashes,
 			List<Integer> rands, CountDownLatch latch) {
@@ -44,8 +46,15 @@ public class Task implements Runnable {
 		this.rands = rands;
 	}
 
-	/* (non-Javadoc)
-	 * @see java.lang.Runnable#run() */
+	/**
+	 * When a Task is submitted to a thread and executed new <code>Shingle</code>s are taken from the
+	 * <code>BlockingQueue</code> populated by the <code>FileParser</code>. If the current Shingle is an instance of
+	 * <code>PoisonPill</code> the <code>CountDownLatch</code> is counted down and the operation terminates.
+	 * <p>
+	 * For every Shingle a List of 'minHashes' is calculated by performing a XOR bitwise operation with the Shingles'
+	 * hash value and every random integer in the List of random integers provided by the <code>Consumer</code>.
+	 * This List is then merged with the List of previously computed 'minHashes' for the associated document.
+	 */
 	@Override
 	public void run() {
 
@@ -70,17 +79,15 @@ public class Task implements Runnable {
 	}
 
 	/**
-	 * Compute min list.
-	 *
+	 * Iterates over two <code>List</code>s of Integers and compares both Integers at one index. The smaller one of
+	 * the two Integers is stored in a new <code>List</code> at the same index as the two original Integers.
 	 * <p>
 	 *
-	 * </p>
-	 *
 	 * @param a
-	 *            the a
+	 *            the first List containing Integers
 	 * @param b
-	 *            the b
-	 * @return the list
+	 *            the second List containing Integers
+	 * @return the list with the smallest elements per index
 	 */
 	private List<Integer> computeMinList(List<Integer> a, List<Integer> b) {
 
@@ -91,14 +98,11 @@ public class Task implements Runnable {
 		}
 
 		for (int i = 0; i < a.size(); i++) {
-
 			int min = a.get(i) < b.get(i) ? a.get(i) : b.get(i);
 			list.add(min);
-
 		}
 
 		return list;
-
 	}
 
 }

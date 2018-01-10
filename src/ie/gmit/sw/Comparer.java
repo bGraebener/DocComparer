@@ -18,9 +18,8 @@ public class Comparer {
 	private BlockingQueue<Shingle> shingleQueue;
 	private int numOfWorkers;
 	private Map<Integer, List<Integer>> hashes;
-	private Calculator calculator;
-
 	private int numOfHashes;
+	private ExecutorService service;
 
 	/**
 	 * Instantiates a new comparer.
@@ -50,12 +49,13 @@ public class Comparer {
 		hashes = new ConcurrentHashMap<>();
 		hashes.put(0, new ArrayList<>(Collections.nCopies(numOfHashes, Integer.MAX_VALUE)));
 		hashes.put(1, new ArrayList<>(Collections.nCopies(numOfHashes, Integer.MAX_VALUE)));
-		calculator = new JaccardCalculator(hashes);
 
 		fileParserOne = new FileParser(paths.get(0), shingleQueue, shingleSize, 0,
 				numOfWorkers / numOfFiles + 1);
 		fileParserTwo = new FileParser(paths.get(1), shingleQueue, shingleSize, 1,
 				numOfWorkers / numOfFiles + 1);
+
+		service = Executors.newFixedThreadPool(numOfFiles + 1);
 
 	}
 
@@ -66,13 +66,49 @@ public class Comparer {
 	 *
 	 * </p>
 	 */
-	public void start() {
-
-		ExecutorService service = Executors.newCachedThreadPool();
+	public void compareDocuments() {
 
 		long start = System.currentTimeMillis();
-
 		System.out.println("\nStarting to calculate the Jaccard Index!");
+
+		submitFileParsers();
+
+		submitConsumer();
+
+		try {
+			service.shutdown();
+			service.awaitTermination(1, TimeUnit.DAYS);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+
+		double result = new JaccardCalculator(hashes).calculate();
+
+		System.out.printf("\nThe calculated similarity for the documents is: %.2f%%\n", result);
+		System.out.println("The operation took " + (System.currentTimeMillis() - start)
+				+ " milliseconds to complete.");
+
+	}
+
+	/**
+	 * Submit consumer.
+	 *
+	 * <p>
+	 */
+	private void submitConsumer() {
+		System.out.println("\nStarting worker threads...");
+
+		service.submit(new Consumer(shingleQueue, hashes, numOfWorkers, numOfHashes));
+
+		System.out.println("Worker threads finished...");
+	}
+
+	/**
+	 * Submit file parsers.
+	 *
+	 * <p>
+	 */
+	private void submitFileParsers() {
 
 		System.out.println("\nParsing file 1 ...");
 
@@ -80,26 +116,6 @@ public class Comparer {
 
 		System.out.println("Parsing file 2 ...");
 		service.submit(fileParserTwo);
-
-		System.out.println("\nStarting worker threads...");
-
-		service.submit(new Consumer(shingleQueue, hashes, numOfWorkers, numOfHashes));
-
-		System.out.println("Worker threads finished...");
-
-		try {
-			service.shutdown();
-			service.awaitTermination(1, TimeUnit.DAYS);
-			// System.out.println("comparer shutdown");
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-
-		double result = calculator.calculate();
-		System.out.printf("\nThe calculated similarity for the documents is: %.2f%%\n", result);
-		System.out.println("The operation took " + (System.currentTimeMillis() - start)
-				+ " milliseconds to complete.");
-
 	}
 
 }

@@ -48,8 +48,10 @@ public class Runner {
 	 */
 	public void showMenu() {
 
-		System.out.println("******************Welcome to the Document Comparer******************");
-		System.out.println("--------------------------------------------------------------------");
+		System.out
+				.println("****************** Welcome to the Document Comparer ******************");
+		System.out
+				.println("----------------------------------------------------------------------");
 		System.out.println();
 
 		// get paths for two documents
@@ -74,7 +76,7 @@ public class Runner {
 
 		Comparer comparer = new Comparer(numOfWorkers, numMinHashes, 2, shingleSize, paths);
 
-		comparer.start();
+		comparer.compareDocuments();
 
 	}
 

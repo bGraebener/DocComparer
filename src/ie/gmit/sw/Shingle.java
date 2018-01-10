@@ -2,8 +2,6 @@
  * Author: Bastian Graebener - G00340600 */
 package ie.gmit.sw;
 
-// TODO: Auto-generated Javadoc
-
 /**
  * Shingles are numeric representations of a <code>String</code> of an arbitrary number of words or characters. The
  * numeric representation is stored as an integer.
