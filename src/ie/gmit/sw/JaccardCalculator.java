@@ -7,14 +7,16 @@ import java.util.*;
 
 // TODO: Auto-generated Javadoc
 /**
- * The Class JaccardCalculator.
+ * The JaccardCalculator calculates the Jaccard Index from two <code>List</code> instances of hash numbers.
+ * <p>
+ * A Map with two
  */
 public class JaccardCalculator implements Calculator {
 
 	private Map<Integer, List<Integer>> hashes;
 
 	/**
-	 * Instantiates a new jaccard calculator.
+	 * Creates a new instance of JaccardCalculator.
 	 *
 	 * <p>
 	 *

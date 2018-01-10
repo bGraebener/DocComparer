@@ -52,10 +52,10 @@ public class Comparer {
 		hashes.put(1, new ArrayList<>(Collections.nCopies(numOfHashes, Integer.MAX_VALUE)));
 		calculator = new JaccardCalculator(hashes);
 
-		fileParserOne = new FileParser(paths.get(0), shingleQueue, shingleSize, 0, numOfWorkers,
-				numOfFiles);
-		fileParserTwo = new FileParser(paths.get(1), shingleQueue, shingleSize, 1, numOfWorkers,
-				numOfFiles);
+		fileParserOne = new FileParser(paths.get(0), shingleQueue, shingleSize, 0,
+				numOfWorkers / numOfFiles + 1);
+		fileParserTwo = new FileParser(paths.get(1), shingleQueue, shingleSize, 1,
+				numOfWorkers / numOfFiles + 1);
 
 	}
 
@@ -90,6 +90,7 @@ public class Comparer {
 		try {
 			service.shutdown();
 			service.awaitTermination(1, TimeUnit.DAYS);
+			// System.out.println("comparer shutdown");
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}

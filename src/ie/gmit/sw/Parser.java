@@ -14,7 +14,7 @@ public interface Parser {
 	 * An object implementing the <code>Parser</code> interface must provide an implementation of the parse method. The
 	 * source of the parsing must be defined in the implementing class.
 	 * <p>
-	 * This method is stateless. It may take any action.
+	 * It may take any action.
 	 */
 	void parse();
 

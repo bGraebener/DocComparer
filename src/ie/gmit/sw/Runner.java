@@ -8,10 +8,8 @@ import java.util.*;
 
 /**
  * The main entry point to the application.
- *
  * <p>
  * Provides a command line menu to the user and sets default values for settings needed by the jaccard index calculator.
- * </p>
  */
 public class Runner {
 
@@ -26,7 +24,6 @@ public class Runner {
 	 *
 	 * <p>
 	 * Sets default values for the shingle sizes, number of minHashes and the number of worker threads.
-	 * </p>
 	 */
 	public Runner() {
 
@@ -38,14 +35,7 @@ public class Runner {
 		paths = new ArrayList<>();
 	}
 
-	/**
-	 * The main entry point to the application.
-	 *
-	 * @param args
-	 *            the command line arguments
-	 */
 	public static void main(String[] args) {
-
 		new Runner().showMenu();
 	}
 
@@ -54,8 +44,7 @@ public class Runner {
 	 *
 	 * <p>
 	 * Asks the user for the location for two documents on the file system. Checks whether the files exist on the file
-	 * system. Asks the user for a location as long as no valid file path is entered.
-	 * </p>
+	 * system and asks the user for a location as long as no valid file path is entered.
 	 */
 	public void showMenu() {
 
@@ -70,8 +59,8 @@ public class Runner {
 
 			Path path = Paths.get(scanner.next());
 
-			if (!Files.exists(path)) {
-				System.out.println("Couldn't find path! Please try again!");
+			if (!Files.exists(path) || Files.isDirectory(path)) {
+				System.out.println("Couldn't find file! Please try again!");
 				i--;
 				continue;
 			}
@@ -111,8 +100,8 @@ public class Runner {
 		System.out.println("\nDefault settings");
 		System.out.println("----------------");
 		System.out.println("\n\tShingle size: " + shingleSize);
-		System.out.println("\tNumber of minhashes: " + numMinHashes);
-		System.out.println("\tNumber of workers: " + numOfWorkers);
+		System.out.println("\tNumber of minHashes: " + numMinHashes);
+		System.out.println("\tNumber of worker threads: " + numOfWorkers);
 	}
 
 	/**
