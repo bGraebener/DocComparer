@@ -27,6 +27,8 @@ public class Consumer implements Runnable {
 	private ExecutorService service;
 	private int maxWorkers;
 
+	private Settings settings;
+
 	/**
 	 * Instantiates a new <code>Consumer</code>.
 	 * <p>
@@ -44,18 +46,32 @@ public class Consumer implements Runnable {
 	 * @param numOfHashes
 	 *            the number of hashes
 	 */
+	// public Consumer(BlockingQueue<Shingle> queue, Map<Integer, List<Integer>> hashes,
+	// int maxWorkers, int numOfHashes) {
+	// this.queue = queue;
+	// this.hashes = hashes;
+	// this.maxWorkers = maxWorkers;
+	// this.latch = new CountDownLatch(maxWorkers);
+	//
+	// this.rands = new Random(0).ints(numOfHashes).boxed().collect(Collectors.toList());
+	// service = Executors.newFixedThreadPool(maxWorkers);
+	//
+	// run();
+	//
+	// }
+
 	public Consumer(BlockingQueue<Shingle> queue, Map<Integer, List<Integer>> hashes,
-			int maxWorkers, int numOfHashes) {
+			Settings settings) {
+		this.settings = settings;
 		this.queue = queue;
 		this.hashes = hashes;
-		this.maxWorkers = maxWorkers;
-		this.latch = new CountDownLatch(maxWorkers);
+		this.latch = new CountDownLatch(settings.getNumOfThreads());
 
-		this.rands = new Random(0).ints(numOfHashes).boxed().collect(Collectors.toList());
-		service = Executors.newFixedThreadPool(maxWorkers);
+		this.rands = new Random(0).ints(settings.getNumOfHashes()).boxed()
+				.collect(Collectors.toList());
+		service = Executors.newFixedThreadPool(settings.getNumOfThreads());
 
 		run();
-
 	}
 
 	/**
@@ -69,7 +85,8 @@ public class Consumer implements Runnable {
 	public void run() {
 
 		List<Callable<Object>> tasks = Stream.generate(() -> new Task(queue, hashes, rands, latch))
-				.limit(maxWorkers).map(Executors::callable).collect(Collectors.toList());
+				.limit(settings.getNumOfThreads()).map(Executors::callable)
+				.collect(Collectors.toList());
 
 		try {
 			service.invokeAll(tasks);

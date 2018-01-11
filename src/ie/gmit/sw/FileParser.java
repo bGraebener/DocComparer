@@ -27,11 +27,13 @@ public class FileParser implements Parser, Runnable {
 
 	private Path fileLocation;
 	private BlockingQueue<Shingle> shingleQueue;
-	private int shingleSize;
+	// private int shingleSize;
 	// private int numOfWorkers;
 	private int docId;
 	// private int numOfFiles;
-	private int numOfPoisonPills;
+	// private int numOfPoisonPills;
+
+	private Settings settings;
 
 	/**
 	 * Creates a new instance of a <code>FileParser</code> that creates Shingles from a text based file and puts them in
@@ -50,13 +52,21 @@ public class FileParser implements Parser, Runnable {
 	 * @param numOfFiles
 	 *            the total number of files that are processed
 	 */
-	public FileParser(Path fileLocation, BlockingQueue<Shingle> shingleQueue, int shingleSize,
-			int docId, int numOfPoisonPills) {
+	// public FileParser(Path fileLocation, BlockingQueue<Shingle> shingleQueue, int shingleSize,
+	// int docId, int numOfPoisonPills) {
+	// this.fileLocation = fileLocation;
+	// this.shingleQueue = shingleQueue;
+	// this.shingleSize = shingleSize;
+	// this.docId = docId;
+	// this.numOfPoisonPills = numOfPoisonPills;
+	// }
+
+	public FileParser(Path fileLocation, BlockingQueue<Shingle> shingleQueue, int docId,
+			Settings settings) {
+		this.settings = settings;
+		this.docId = docId;
 		this.fileLocation = fileLocation;
 		this.shingleQueue = shingleQueue;
-		this.shingleSize = shingleSize;
-		this.docId = docId;
-		this.numOfPoisonPills = numOfPoisonPills;
 	}
 
 	/**
@@ -78,7 +88,7 @@ public class FileParser implements Parser, Runnable {
 
 				buffer = splitLine(line);
 
-				while (buffer.size() >= shingleSize) {
+				while (buffer.size() >= settings.getShingleSize()) {
 					createShingle(buffer);
 				}
 			}
@@ -123,7 +133,7 @@ public class FileParser implements Parser, Runnable {
 
 		StringBuilder tmp = new StringBuilder();
 
-		for (int i = 0; i < shingleSize; i++) {
+		for (int i = 0; i < settings.getShingleSize(); i++) {
 			tmp.append(buffer.removeFirst() + " ");
 		}
 
@@ -164,7 +174,7 @@ public class FileParser implements Parser, Runnable {
 	 * read.
 	 */
 	private void addPoisonPills() {
-		for (int i = 0; i < numOfPoisonPills; i++) {
+		for (int i = 0; i < settings.getNumOfPoisonPills(); i++) {
 			try {
 				shingleQueue.put(new PoisonShingle());
 			} catch (InterruptedException e) {
@@ -178,6 +188,10 @@ public class FileParser implements Parser, Runnable {
 	@Override
 	public void run() {
 		parse();
+	}
+
+	public int getDocId() {
+		return docId;
 	}
 
 }

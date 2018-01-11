@@ -7,7 +7,6 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.CountDownLatch;
 import java.util.stream.Collectors;
 
-// TODO: Auto-generated Javadoc
 /**
  * A Task creates 'minHashes' from <code>Shingles</code>.
  * <p>
