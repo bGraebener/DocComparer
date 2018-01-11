@@ -20,7 +20,7 @@ public class JaccardCalculator implements Calculator {
 	 * <p>
 	 * The Jaccard index of two documents is calculated by dividing the number of common elements by the number of all
 	 * elements minus the common elements.
-	 * 
+	 *
 	 * @param hashes
 	 *            the Map containing the list of minHashes for every document
 	 */
@@ -40,8 +40,6 @@ public class JaccardCalculator implements Calculator {
 	 * or
 	 * <tt>J(A,B)=|A∩B|/|A|+|B|-|A∩B|</tt>
 	 * </blockquote>
-	 *
-	 * @return the Jaccard Index calculated for the two documents as percentage
 	 */
 	@Override
 	public void calculate() {
