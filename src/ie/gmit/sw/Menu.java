@@ -13,12 +13,7 @@ import java.util.Scanner;
  */
 public class Menu {
 
-	// private List<Path> paths;
 	private Scanner scanner;
-	// private int shingleSize;
-	// private int numMinHashes;
-	// private int numOfWorkers;
-
 	private Settings settings;
 
 	/**
@@ -28,14 +23,7 @@ public class Menu {
 	 * Sets default values for the shingle sizes, number of minHashes and the number of worker threads.
 	 */
 	public Menu() {
-
-		// shingleSize = 4;
-		// numMinHashes = 200;
-		// numOfWorkers = 100;
-
 		scanner = new Scanner(System.in);
-		// paths = new ArrayList<>();
-
 		settings = new Settings();
 	}
 
@@ -56,7 +44,7 @@ public class Menu {
 
 		// TODO display instructions
 
-		System.out.println("Please enter the number of document you wish to compare: ");
+		System.out.print("Please enter the number of document you wish to compare: ");
 		int numOfFiles = scanner.nextInt();
 		settings.setNumOfFiles(numOfFiles);
 
@@ -79,12 +67,7 @@ public class Menu {
 
 		chooseSettings();
 
-		// Comparer comparer = new Comparer(numOfWorkers, numMinHashes, 2, shingleSize, paths);
-
-		// comparer.compareDocuments();
-
 		return settings;
-
 	}
 
 	/**

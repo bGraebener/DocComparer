@@ -78,6 +78,8 @@ public class Comparer {
 					new FileParser(settings.getFileLocations().get(i), shingleQueue, i, settings));
 		}
 
+		System.out.println(parsers);
+
 	}
 
 	/**
@@ -139,7 +141,7 @@ public class Comparer {
 		// service.submit(fileParserTwo);
 
 		parsers.forEach(parser -> {
-			System.out.println("\nParsing file " + parser.getDocId() + " ...");
+			System.out.println("Parsing file " + (parser.getDocId() + 1) + " ...");
 			service.submit(parser);
 		});
 	}

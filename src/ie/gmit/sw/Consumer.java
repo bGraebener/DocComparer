@@ -25,7 +25,7 @@ public class Consumer implements Runnable {
 	private CountDownLatch latch;
 	private List<Integer> rands;
 	private ExecutorService service;
-	private int maxWorkers;
+	// private int maxWorkers;
 
 	private Settings settings;
 
@@ -71,7 +71,7 @@ public class Consumer implements Runnable {
 				.collect(Collectors.toList());
 		service = Executors.newFixedThreadPool(settings.getNumOfThreads());
 
-		run();
+		// run();
 	}
 
 	/**
@@ -83,6 +83,8 @@ public class Consumer implements Runnable {
 	 */
 	@Override
 	public void run() {
+
+		System.out.println(settings);
 
 		List<Callable<Object>> tasks = Stream.generate(() -> new Task(queue, hashes, rands, latch))
 				.limit(settings.getNumOfThreads()).map(Executors::callable)

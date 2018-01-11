@@ -194,4 +194,10 @@ public class FileParser implements Parser, Runnable {
 		return docId;
 	}
 
+	@Override
+	public String toString() {
+		return "FileParser [" + (fileLocation != null ? "fileLocation=" + fileLocation + ", " : "")
+				+ "docId=" + docId + "]";
+	}
+
 }

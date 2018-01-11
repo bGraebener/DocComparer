@@ -19,7 +19,6 @@ public class Settings {
 	private int shingleSize;
 	private int numOfHashes;
 	private List<Path> fileLocations;
-	private int numOfPoisonPills;
 
 	/**
 	 * Instantiates a new settings.
@@ -54,8 +53,6 @@ public class Settings {
 		this.shingleSize = shingleSize;
 		this.numOfHashes = numOfHashes;
 		this.fileLocations = new ArrayList<>(numOfFiles);
-
-		this.setNumOfPoisonPills(numOfThreads / numOfFiles + 1);
 	}
 
 	/**
@@ -159,17 +156,14 @@ public class Settings {
 	 * @return the num of poison pills
 	 */
 	public int getNumOfPoisonPills() {
-		return numOfPoisonPills;
+		return numOfThreads / numOfFiles + 1;
 	}
 
-	/**
-	 * Sets the num of poison pills.
-	 *
-	 * @param numOfPoisonPills
-	 *            the new num of poison pills
-	 */
-	public void setNumOfPoisonPills(int numOfPoisonPills) {
-		this.numOfPoisonPills = numOfPoisonPills;
+	@Override
+	public String toString() {
+		return "Settings [numOfFiles=" + numOfFiles + ", numOfThreads=" + numOfThreads
+				+ ", shingleSize=" + shingleSize + ", numOfHashes=" + numOfHashes + ", "
+				+ (fileLocations != null ? "fileLocations=" + fileLocations + ", " : "") + "]";
 	}
 
 }
