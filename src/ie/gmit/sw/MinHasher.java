@@ -7,6 +7,11 @@ import java.util.*;
 import java.util.concurrent.*;
 
 // TODO: Auto-generated Javadoc
+/**
+ * The MinHasher parses documents and calculates a <code>List</code> of minHashes for each document.
+ *
+ * @author Bastian Graebener
+ */
 public class MinHasher {
 
 	private BlockingQueue<Shingle> shingleQueue;
@@ -18,7 +23,8 @@ public class MinHasher {
 	/**
 	 * Creates a new instance of a <code>MinHasher</code>.
 	 * <p>
-	 *
+	 * A MinHasher maintains a <code>BlockingQueue</code>
+	 * 
 	 * @param settings
 	 *            settings used calculate the similarity of the documents
 	 */
@@ -33,8 +39,7 @@ public class MinHasher {
 	}
 
 	/**
-	 * Initialise.
-	 *
+	 * Initialises a <code>FileParser</code> instance and a <code>List</code> of minHashes for every document.
 	 */
 	private void initialise() {
 
@@ -47,11 +52,12 @@ public class MinHasher {
 	}
 
 	/**
-	 * Calculates minhashes for all documents.
-	 *
+	 * Calculates minHashes for all documents.
 	 * <p>
+	 * All <code>FileParser</code>s producing the <code>Shingle</code>s and the <code>Consumer</code> processing the
+	 * Shingles run on their own thread.
 	 *
-	 * @return the map
+	 * @return the map containing all list of minHashes for all documents
 	 */
 	public Map<Integer, List<Integer>> calculateMinHashes() {
 
@@ -60,7 +66,7 @@ public class MinHasher {
 		submitFileParsers();
 
 		System.out.println("\nStarting worker threads...");
-		service.submit(new Consumer(shingleQueue, hashes, settings));
+		service.execute(new Consumer(shingleQueue, hashes, settings));
 
 		try {
 			service.shutdown();
@@ -69,21 +75,17 @@ public class MinHasher {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-
 		return hashes;
 	}
 
 	/**
-	 * Submits file parsers to the thread pool.
-	 * <p>
-	 * Displays messages about start of the operation.
+	 * Submits all <code>FileParser</code>s to the thread pool.
 	 */
 	private void submitFileParsers() {
 
 		parsers.forEach(parser -> {
-			System.out.println("Parsing file " + (parser.getDocId() + 1) + " ...");
-			service.submit(parser);
+			System.out.println("Parsing file " + (parser.getDocId() + 1) + "...");
+			service.execute(parser);
 		});
 	}
-
 }

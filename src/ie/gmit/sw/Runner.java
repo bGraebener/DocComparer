@@ -22,9 +22,8 @@ public class Runner {
 		Map<Integer, List<Integer>> hashes = comparer.calculateMinHashes();
 
 		Calculator calculator = new JaccardCalculator(hashes);
-		double result = calculator.calculate();
+		calculator.calculate();
 
-		// System.out.printf("\nThe calculated similarity for the documents is: %.2f%%\n", result);
 		System.out.println("\nThe operation took " + (System.currentTimeMillis() - start)
 				+ " milliseconds to complete.");
 

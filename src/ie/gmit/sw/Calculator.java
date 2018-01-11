@@ -8,9 +8,7 @@ package ie.gmit.sw;
 public interface Calculator {
 
 	/**
-	 * Performs some form of calculation and returns the result.
-	 *
-	 * @return the result of the calculation
+	 * Performs some form of calculation.
 	 */
-	double calculate();
+	void calculate();
 }

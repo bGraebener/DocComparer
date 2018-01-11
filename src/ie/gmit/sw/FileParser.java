@@ -27,12 +27,7 @@ public class FileParser implements Parser, Runnable {
 
 	private Path fileLocation;
 	private BlockingQueue<Shingle> shingleQueue;
-	// private int shingleSize;
-	// private int numOfWorkers;
 	private int docId;
-	// private int numOfFiles;
-	// private int numOfPoisonPills;
-
 	private Settings settings;
 
 	/**
@@ -43,24 +38,11 @@ public class FileParser implements Parser, Runnable {
 	 *            the file location of the source to be parsed
 	 * @param shingleQueue
 	 *            a <code>BlockinQueue</code> that holds Shingles to be processed by a <code>Task</code>
-	 * @param shingleSize
-	 *            the amount of words per shingle
 	 * @param docId
 	 *            the document id of the document processed by this FileParser
-	 * @param numOfWorkers
-	 *            the number of worker threads that take Shingles of the BlockinQueue
-	 * @param numOfFiles
-	 *            the total number of files that are processed
+	 * @param settings
+	 *            the settings used to calculate the jaccard index
 	 */
-	// public FileParser(Path fileLocation, BlockingQueue<Shingle> shingleQueue, int shingleSize,
-	// int docId, int numOfPoisonPills) {
-	// this.fileLocation = fileLocation;
-	// this.shingleQueue = shingleQueue;
-	// this.shingleSize = shingleSize;
-	// this.docId = docId;
-	// this.numOfPoisonPills = numOfPoisonPills;
-	// }
-
 	public FileParser(Path fileLocation, BlockingQueue<Shingle> shingleQueue, int docId,
 			Settings settings) {
 		this.settings = settings;
@@ -92,8 +74,6 @@ public class FileParser implements Parser, Runnable {
 					createShingle(buffer);
 				}
 			}
-
-			// create final shingle from left over words in buffer
 			flushBuffer(buffer);
 
 			addPoisonPills();

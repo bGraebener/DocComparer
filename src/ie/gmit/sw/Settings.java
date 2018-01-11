@@ -6,9 +6,8 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
-// TODO: Auto-generated Javadoc
 /**
- * The Class Settings.
+ * The Settings class stores all information needed to calculate a Jaccard Index.
  *
  * @author Bastian Graebener
  */
@@ -21,80 +20,59 @@ public class Settings {
 	private List<Path> fileLocations;
 
 	/**
-	 * Instantiates a new settings.
-	 *
+	 * Creates a new settings instance with default values for all fields.
 	 * <p>
-	 *
-	 * </p>
+	 * Sets default values for the shingle sizes, the number of documents, the number of minHashes and the number of
+	 * worker threads. Maintains a list of all file locations entered by the user.
 	 */
 	public Settings() {
-		this(2, 4, 200, 200);
-	}
-
-	/**
-	 * Instantiates a new settings.
-	 *
-	 * <p>
-	 *
-	 * </p>
-	 *
-	 * @param numOfFiles
-	 *            the num of files
-	 * @param shingleSize
-	 *            the shingle size
-	 * @param numOfThreads
-	 *            the num of threads
-	 * @param numOfHashes
-	 *            the num of hashes
-	 */
-	public Settings(int numOfFiles, int shingleSize, int numOfThreads, int numOfHashes) {
-		this.numOfFiles = numOfFiles;
-		this.numOfThreads = numOfThreads;
-		this.shingleSize = shingleSize;
-		this.numOfHashes = numOfHashes;
+		this.numOfFiles = 2;
+		this.numOfThreads = 200;
+		this.shingleSize = 4;
+		this.numOfHashes = 200;
 		this.fileLocations = new ArrayList<>(numOfFiles);
 	}
 
 	/**
-	 * Gets the num of files.
+	 * Gets the number of files.
 	 *
-	 * @return the num of files
+	 * @return the number of files
 	 */
 	public int getNumOfFiles() {
 		return numOfFiles;
 	}
 
 	/**
-	 * Sets the num of files.
+	 * Sets the number of files.
 	 *
 	 * @param numOfFiles
-	 *            the new num of files
+	 *            the new number of files
 	 */
 	public void setNumOfFiles(int numOfFiles) {
 		this.numOfFiles = numOfFiles;
 	}
 
 	/**
-	 * Gets the num of threads.
+	 * Gets the number of threads.
 	 *
-	 * @return the num of threads
+	 * @return the number of threads
 	 */
 	public int getNumOfThreads() {
 		return numOfThreads;
 	}
 
 	/**
-	 * Sets the num of threads.
+	 * Sets the number of threads.
 	 *
 	 * @param numOfThreads
-	 *            the new num of threads
+	 *            the new number of threads
 	 */
 	public void setNumOfThreads(int numOfThreads) {
 		this.numOfThreads = numOfThreads;
 	}
 
 	/**
-	 * Gets the shingle size.
+	 * Gets the number of words a shingle is made up of.
 	 *
 	 * @return the shingle size
 	 */
@@ -103,7 +81,7 @@ public class Settings {
 	}
 
 	/**
-	 * Sets the shingle size.
+	 * Sets the number of words a shingle is made up of.
 	 *
 	 * @param shingleSize
 	 *            the new shingle size
@@ -113,47 +91,37 @@ public class Settings {
 	}
 
 	/**
-	 * Gets the num of hashes.
+	 * Gets the number of hashes.
 	 *
-	 * @return the num of hashes
+	 * @return the number of hashes
 	 */
 	public int getNumOfHashes() {
 		return numOfHashes;
 	}
 
 	/**
-	 * Sets the num of hashes.
+	 * Sets the number of hashes.
 	 *
 	 * @param numOfHashes
-	 *            the new num of hashes
+	 *            the new number of hashes
 	 */
 	public void setNumOfHashes(int numOfHashes) {
 		this.numOfHashes = numOfHashes;
 	}
 
 	/**
-	 * Gets the file locations.
+	 * Gets the the list of file locations.
 	 *
-	 * @return the file locations
+	 * @return the list of file locations
 	 */
 	public List<Path> getFileLocations() {
 		return fileLocations;
 	}
 
 	/**
-	 * Sets the file locations.
+	 * Gets the number of poison pills.
 	 *
-	 * @param fileLocations
-	 *            the new file locations
-	 */
-	public void setFileLocations(List<Path> fileLocations) {
-		this.fileLocations = fileLocations;
-	}
-
-	/**
-	 * Gets the num of poison pills.
-	 *
-	 * @return the num of poison pills
+	 * @return the number of poison pills
 	 */
 	public int getNumOfPoisonPills() {
 		return numOfThreads / numOfFiles + 1;

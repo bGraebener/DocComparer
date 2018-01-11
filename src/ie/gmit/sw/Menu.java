@@ -7,9 +7,7 @@ import java.nio.file.*;
 import java.util.Scanner;
 
 /**
- * The main entry point to the application.
- * <p>
- * Provides a command line menu to the user and sets default values for settings needed by the jaccard index calculator.
+ * Provides a command line menu to the user and sets values for settings needed to calculate the jaccard index.
  */
 public class Menu {
 
@@ -17,10 +15,10 @@ public class Menu {
 	private Settings settings;
 
 	/**
-	 * Instantiates a new Menu.
-	 *
+	 * Creates a new Menu instance.
 	 * <p>
-	 * Sets default values for the shingle sizes, number of minHashes and the number of worker threads.
+	 * Provides the main menu for the application asking the user to enter the number of documents, their location on
+	 * the file system and settings needed to calculate the jaccard index.
 	 */
 	public Menu() {
 		scanner = new Scanner(System.in);
@@ -29,10 +27,11 @@ public class Menu {
 
 	/**
 	 * Shows the main application menu.
-	 *
 	 * <p>
-	 * Asks the user for the location for two documents on the file system. Checks whether the files exist on the file
-	 * system and asks the user for a location as long as no valid file path is entered.
+	 * Asks the user for the amount of document they wish to compare and their location on the file system. Checks
+	 * whether the files exist and asks for a location as long as no valid file path is entered.
+	 *
+	 * @return the settings entered by the user or default settings
 	 */
 	public Settings showMenu() {
 
@@ -42,10 +41,13 @@ public class Menu {
 				.println("----------------------------------------------------------------------");
 		System.out.println();
 
-		// TODO display instructions
+		System.out.println("Instructions:");
+		System.out.println(
+				"This application compares a document against other documents\nand calculates the similarity of the documents using the Jaccard Index.\n"
+						+ "\nYou can enter the number of documents you wish to compare and"
+						+ "\nset options like the size of the shingles, the number of threads and\nhash values or use default values.\n");
 
 		int numOfFiles;
-		Path path;
 
 		do {
 			System.out.print("Please enter the number of document you wish to compare (min. 2): ");
@@ -54,8 +56,26 @@ public class Menu {
 
 		settings.setNumOfFiles(numOfFiles);
 
-		setOriginalDocument();
+		getOriginalDocumentLocation();
 
+		getOtherDocumentLocations(numOfFiles);
+
+		showDefaultSettings();
+
+		chooseSettings();
+
+		return settings;
+	}
+
+	/**
+	 * Gets the locations for the other documents, checks if they exist and adds them to the list of locations in the
+	 * settings.
+	 *
+	 * @param numOfFiles
+	 *            the number of files the user wishes to enter
+	 */
+	private void getOtherDocumentLocations(int numOfFiles) {
+		Path path;
 		for (int i = 1; i < numOfFiles; i++) {
 
 			System.out.print("Please enter the path to the " + (i + 1) + ". document: ");
@@ -70,25 +90,19 @@ public class Menu {
 
 			settings.getFileLocations().add(path);
 		}
-
-		showDefaultSettings();
-
-		chooseSettings();
-
-		return settings;
 	}
 
 	/**
-	 * Sets the original document and check.
-	 *
-	 * <p>
+	 * Gets the location for the original document and checks if it exists. Adds it to the list of file locations in the
+	 * settings.
 	 */
-	private void setOriginalDocument() {
+	private void getOriginalDocumentLocation() {
 		Path path;
 
 		do {
 			System.out.print("Please enter the path to the original document: ");
 			path = Paths.get(scanner.next());
+
 			if (!Files.exists(path) || Files.isDirectory(path)) {
 				System.out.println("Couldn't find file! Please try again!");
 				continue;
@@ -118,11 +132,11 @@ public class Menu {
 	 * Shows the default settings.
 	 */
 	private void showDefaultSettings() {
-		System.out.println("\nDefault settings");
-		System.out.println("----------------");
-		System.out.println("\n\tShingle size: " + settings.getShingleSize());
-		System.out.println("\tNumber of minHashes: " + settings.getNumOfHashes());
-		System.out.println("\tNumber of worker threads: " + settings.getNumOfThreads());
+		System.out.println("\nDefault settings:");
+		// System.out.println("----------------");
+		System.out.println("\nShingle size: " + settings.getShingleSize());
+		System.out.println("Number of minHashes: " + settings.getNumOfHashes());
+		System.out.println("Number of worker threads: " + settings.getNumOfThreads());
 	}
 
 	/**

@@ -3,7 +3,7 @@
 package ie.gmit.sw;
 
 /**
- * The interface should be implemented by any class whose instances are used to parse a source.
+ * The Parser interface should be implemented by any class whose instances are used to parse a source.
  *
  * @author Bastian Graebener
  */
