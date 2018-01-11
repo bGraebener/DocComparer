@@ -28,7 +28,7 @@ public class Settings {
 	 * </p>
 	 */
 	public Settings() {
-		this(2, 4, 100, 200);
+		this(2, 4, 200, 200);
 	}
 
 	/**

@@ -25,8 +25,6 @@ public class Consumer implements Runnable {
 	private CountDownLatch latch;
 	private List<Integer> rands;
 	private ExecutorService service;
-	// private int maxWorkers;
-
 	private Settings settings;
 
 	/**
@@ -41,25 +39,9 @@ public class Consumer implements Runnable {
 	 *            the BlockingQueue that contains the <code>Shingle</code> instances
 	 * @param hashes
 	 *            a <code>Map</code> which contains a List of hashes per document
-	 * @param maxWorkers
-	 *            the max number of worker threads
-	 * @param numOfHashes
-	 *            the number of hashes
+	 * @param settings
+	 *            the settings used to calculate the similarity
 	 */
-	// public Consumer(BlockingQueue<Shingle> queue, Map<Integer, List<Integer>> hashes,
-	// int maxWorkers, int numOfHashes) {
-	// this.queue = queue;
-	// this.hashes = hashes;
-	// this.maxWorkers = maxWorkers;
-	// this.latch = new CountDownLatch(maxWorkers);
-	//
-	// this.rands = new Random(0).ints(numOfHashes).boxed().collect(Collectors.toList());
-	// service = Executors.newFixedThreadPool(maxWorkers);
-	//
-	// run();
-	//
-	// }
-
 	public Consumer(BlockingQueue<Shingle> queue, Map<Integer, List<Integer>> hashes,
 			Settings settings) {
 		this.settings = settings;
@@ -71,20 +53,17 @@ public class Consumer implements Runnable {
 				.collect(Collectors.toList());
 		service = Executors.newFixedThreadPool(settings.getNumOfThreads());
 
-		// run();
 	}
 
 	/**
 	 * When the <code>Consumer</code> is executed on a thread, a <code>List</code> of <code>Task</code> instances is
-	 * created.
+	 * created with the number of worker threads specified by the settings.
+	 * <p>
 	 * This List is passed to an <code>ExecutorService</code> and invoked immediately. The Tasks need to ensure to count
 	 * down the <code>CountDownLatch</code> provided by the Consumer or otherwise the Consumer can not finish.
-	 *
 	 */
 	@Override
 	public void run() {
-
-		System.out.println(settings);
 
 		List<Callable<Object>> tasks = Stream.generate(() -> new Task(queue, hashes, rands, latch))
 				.limit(settings.getNumOfThreads()).map(Executors::callable)

@@ -44,15 +44,23 @@ public class Menu {
 
 		// TODO display instructions
 
-		System.out.print("Please enter the number of document you wish to compare: ");
-		int numOfFiles = scanner.nextInt();
+		int numOfFiles;
+		Path path;
+
+		do {
+			System.out.print("Please enter the number of document you wish to compare (min. 2): ");
+			numOfFiles = scanner.nextInt();
+		} while (numOfFiles < 2);
+
 		settings.setNumOfFiles(numOfFiles);
 
-		for (int i = 0; i < numOfFiles; i++) {
+		setOriginalDocument();
+
+		for (int i = 1; i < numOfFiles; i++) {
 
 			System.out.print("Please enter the path to the " + (i + 1) + ". document: ");
 
-			Path path = Paths.get(scanner.next());
+			path = Paths.get(scanner.next());
 
 			if (!Files.exists(path) || Files.isDirectory(path)) {
 				System.out.println("Couldn't find file! Please try again!");
@@ -68,6 +76,27 @@ public class Menu {
 		chooseSettings();
 
 		return settings;
+	}
+
+	/**
+	 * Sets the original document and check.
+	 *
+	 * <p>
+	 */
+	private void setOriginalDocument() {
+		Path path;
+
+		do {
+			System.out.print("Please enter the path to the original document: ");
+			path = Paths.get(scanner.next());
+			if (!Files.exists(path) || Files.isDirectory(path)) {
+				System.out.println("Couldn't find file! Please try again!");
+				continue;
+			}
+
+		} while (!Files.exists(path) || Files.isDirectory(path));
+
+		settings.getFileLocations().add(path);
 	}
 
 	/**

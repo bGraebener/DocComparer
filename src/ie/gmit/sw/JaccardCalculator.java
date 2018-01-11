@@ -5,6 +5,7 @@ package ie.gmit.sw;
 
 import java.util.*;
 
+// TODO Javadocs
 /**
  * The JaccardCalculator calculates the Jaccard Index from two <code>List</code> instances containing hash numbers.
  *
@@ -42,16 +43,25 @@ public class JaccardCalculator implements Calculator {
 	@Override
 	public double calculate() {
 
-		List<Integer> a = hashes.get(0);
-		List<Integer> b = hashes.get(1);
+		List<Integer> tmp;
+		List<Integer> original = hashes.remove(0);
 
-		List<Integer> c = new ArrayList<>(a);
+		Set<Integer> keys = hashes.keySet();
 
-		c.retainAll(b);
+		for (int key : keys) {
 
-		double jaccard = (double) c.size() / (a.size() + b.size() - c.size());
+			List<Integer> other = hashes.get(key);
+			tmp = new ArrayList<>(original);
 
-		return jaccard * 100;
+			tmp.retainAll(other);
+
+			double jaccard = (double) tmp.size() / (original.size() + other.size() - tmp.size());
+			System.out.printf(
+					"\nThe calculated similarity for the original document and document %d is: %.2f%%",
+					key + 1, jaccard * 100);
+		}
+
+		return 0;
 	}
 
 }
